@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* Basic styling for forms */
+        body { font-family: Arial, sans-serif; }
+        .form-container { max-width: 300px; margin: auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; }
+        input { width: 100%; padding: 8px; }
+        button { width: 100%; padding: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Login</h2>
+    <form id="loginForm" onsubmit="return login(event)">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+
+    <h2>Sign Up</h2>
+    <form id="signupForm" onsubmit="return signup(event)">
+        <div class="form-group">
+            <label for="newUsername">Username</label>
+            <input type="text" id="newUsername" required>
+        </div>
+        <div class="form-group">
+            <label for="newPassword">Password</label>
+            <input type="password" id="newPassword" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+        </div>
+        <button type="submit">Sign Up</button>
+    </form>
+</div>
+
+<script>
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+
+    function signup(event) {
+        event.preventDefault();
+        const username = document.getElementById('newUsername').value;
+        const password = document.getElementById('newPassword').value;
+        const email = document.getElementById('email').value;
+
+        if (users.some(user => user.username === username)) {
+            alert('Username already exists!');
+            return;
+        }
+
+        users.push({ username, password, email, friends: [] });
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Signup successful! You can now log in.');
+        document.getElementById('signupForm').reset();
+    }
+
+    function login(event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        const user = users.find(user => user.username === username && user.password === password);
+        if (user) {
+            alert('Login successful!');
+            // Additional code for handling user session can be added here.
+            console.log('User logged in:', user);
+        } else {
+            alert('Invalid username or password!');
+        }
+    }
+</script>
+
+</body>
+</html>
